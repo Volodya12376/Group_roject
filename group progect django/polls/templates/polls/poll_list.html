@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container py-4">
+  <h1>Доступні опитування</h1>
+  {% for poll in polls %}
+    <article class="card mb-3"><div class="card-body">
+      <h2 class="h5">{{ poll.title }}</h2>
+      <p>{{ poll.description|default:"Опис відсутній." }}</p>
+      <p class="text-muted">Запитань: {{ poll.questions.count }}</p>
+      <a class="btn btn-primary" href="{% url 'polls:poll-detail' poll.pk %}">Відкрити</a>
+    </div></article>
+  {% empty %}<p>Наразі немає опублікованих опитувань.</p>{% endfor %}
+</div>
+{% endblock %}

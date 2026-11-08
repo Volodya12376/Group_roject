@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Оцінки учня | Електронний журнал{% endblock %}
+
+{% block hero %}
+<section class="hero">
+    <div class="container">
+        <a href="{% url 'students' %}" class="back-link">
+            <i class="bi bi-arrow-left me-1"></i> До списку учнів
+        </a>
+        <div class="d-flex align-items-center gap-3 mt-3">
+            <div class="hero-icon"><i class="bi bi-person-fill"></i></div>
+            <div>
+                <h1 class="h3 fw-bold mb-1">{{ student.username }}</h1>
+                <p class="mb-0 opacity-75">Навчальні результати учня</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block content %}
+<div class="section-heading">
+    <div>
+        <h2 class="h5 fw-bold mb-1">Журнал оцінок</h2>
+        <p class="text-muted mb-0">(Оцінки згруповані за датами)</p>
+    </div>
+    <span class="count-badge"><i class="bi bi-journal-check me-1"></i>{{ marks|length }} оцінок</span>
+</div>
+
+<div class="grade-panel">
+    {% regroup marks by lesson_date as date_list %}
+    {% for date in date_list %}
+        <div class="date-heading">
+            <i class="bi bi-calendar3 me-2"></i>
+            {% if date.grouper %}{{ date.grouper|date:"d.m.Y" }}{% else %}Дата не вказана{% endif %}
+        </div>
+        {% for item in date.list %}
+        <div class="grade-row">
+            <div class="subject-icon"><i class="bi bi-book"></i></div>
+            <div class="subject-name">
+                <div class="fw-semibold">{% if item.lesson_theme %}{{ item.lesson.name }} ({{ item.lesson_theme }}){% else %}{{ item.lesson.name }}{% endif %}</div>
+                <div class="small text-muted">Оцінка з предмета</div>
+            </div>
+            <span class="grade-value {% if item.mark <= 2 %}grade-low{% elif item.mark == 3 %}grade-mid{% else %}grade-high{% endif %}">
+                {{ item.mark }}
+            </span>
+        </div>
+        {% endfor %}
+    {% empty %}
+        <div class="empty-state">
+            <i class="bi bi-journal-x"></i>
+            <h3 class="h5 mt-3">Оцінок поки немає</h3>
+            <p class="text-muted mb-0">Для цього учня ще не додано оцінок.</p>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

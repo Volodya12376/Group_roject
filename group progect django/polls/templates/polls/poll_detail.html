@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container py-4">
+  <h1>{{ poll.title }}</h1>
+  <p>{{ poll.description }}</p>
+  <p>Кількість запитань: {{ question_count }}</p>
+  {% if attempt and attempt.status == "completed" %}
+    <p>Ви вже завершили це опитування.</p>
+    <a class="btn btn-outline-primary" href="{% url 'polls:my-result' poll.pk %}">Мій результат</a>
+    <form method="post" action="{% url 'polls:retake' poll.pk %}" class="mt-2">
+      {% csrf_token %}<button class="btn btn-warning">Пройти повторно</button>
+    </form>
+  {% else %}
+    <a class="btn btn-primary" href="{% url 'polls:poll-step' poll.pk 1 %}">Почати опитування</a>
+  {% endif %}
+</div>
+{% endblock %}

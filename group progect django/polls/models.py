@@ -1,63 +1,97 @@
 from django.conf import settings
-from django.core.exceptions import ValidationError
 from django.db import models
+from django.core.validators import MinValueValidator
 
 
 class Poll(models.Model):
-    title = models.CharField("Назва голосування", max_length=200)
+    title = models.CharField("Назва", max_length=200)
     description = models.TextField("Опис", blank=True)
-    is_active = models.BooleanField(default=True)
-    allow_revote = models.BooleanField("Дозволити переголосування", default=True)
-    show_results = models.BooleanField("Показувати результати всім", default=True)
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, related_name="polls_created")
-    starts_at = models.DateTimeField(null=True, blank=True)
-    ends_at = models.DateTimeField(null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    is_published = models.BooleanField("Опубліковано", default=False)
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
+        null=True, blank=True, related_name="created_polls", verbose_name="Автор"
+    )
+    created_at = models.DateTimeField("Створено", auto_now_add=True)
+    updated_at = models.DateTimeField("Оновлено", auto_now=True)
 
     class Meta:
         ordering = ["-created_at"]
-        verbose_name = "голосування"
-        verbose_name_plural = "голосування"
-
-    def clean(self):
-        if self.starts_at and self.ends_at and self.ends_at < self.starts_at:
-            raise ValidationError({"ends_at": "Завершення голосування не може бути раніше початку."})
+        verbose_name = "Опитування"
+        verbose_name_plural = "Опитування"
 
     def __str__(self):
         return self.title
 
 
-class PollOption(models.Model):
-    poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name="options")
-    text = models.CharField("Варіант голосування", max_length=300)
-    order = models.PositiveIntegerField(default=1)
+class Question(models.Model):
+    poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name="questions", verbose_name="Опитування")
+    text = models.CharField("Текст запитання", max_length=500)
+    order = models.PositiveIntegerField("Порядок", default=1, validators=[MinValueValidator(1)])
+    required = models.BooleanField("Обов'язкове", default=True)
 
     class Meta:
-        ordering = ["order"]
-        constraints = [models.UniqueConstraint(fields=["poll", "order"], name="unique_poll_option_order")]
-        verbose_name = "варіант голосування"
-        verbose_name_plural = "варіанти голосування"
+        ordering = ["order", "id"]
+        verbose_name = "Запитання"
+        verbose_name_plural = "Запитання"
+        constraints = [
+            models.UniqueConstraint(fields=["poll", "order"], name="unique_question_order_per_poll")
+        ]
+
+    def __str__(self):
+        return f"{self.poll.title}: {self.text[:60]}"
+
+
+class Choice(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name="choices", verbose_name="Запитання")
+    text = models.CharField("Варіант відповіді", max_length=300)
+    order = models.PositiveIntegerField("Порядок", default=1)
+
+    class Meta:
+        ordering = ["order", "id"]
+        verbose_name = "Варіант відповіді"
+        verbose_name_plural = "Варіанти відповідей"
 
     def __str__(self):
         return self.text
 
 
-class PollVote(models.Model):
-    poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name="votes")
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="poll_votes")
-    option = models.ForeignKey(PollOption, on_delete=models.CASCADE, related_name="votes")
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+class PollAttempt(models.Model):
+    STATUS_IN_PROGRESS = "in_progress"
+    STATUS_COMPLETED = "completed"
+    STATUS_CHOICES = [
+        (STATUS_IN_PROGRESS, "У процесі"),
+        (STATUS_COMPLETED, "Завершено"),
+    ]
+
+    poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name="attempts", verbose_name="Опитування")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="poll_attempts", verbose_name="Користувач")
+    status = models.CharField("Статус", max_length=20, choices=STATUS_CHOICES, default=STATUS_IN_PROGRESS)
+    started_at = models.DateTimeField("Початок", auto_now_add=True)
+    completed_at = models.DateTimeField("Завершено", null=True, blank=True)
 
     class Meta:
-        constraints = [models.UniqueConstraint(fields=["poll", "user"], name="unique_poll_vote_per_user")]
-        verbose_name = "голос"
-        verbose_name_plural = "голоси"
-
-    def clean(self):
-        if self.option_id and self.poll_id and self.option.poll_id != self.poll_id:
-            raise ValidationError({"option": "Обраний варіант має належати цьому голосуванню."})
+        ordering = ["-started_at"]
+        verbose_name = "Проходження"
+        verbose_name_plural = "Проходження"
+        constraints = [
+            models.UniqueConstraint(fields=["poll", "user"], name="one_current_attempt_per_user_poll")
+        ]
 
     def __str__(self):
-        return f"{self.user} — {self.poll}: {self.option}"
+        return f"{self.user} — {self.poll} ({self.get_status_display()})"
+
+
+class Answer(models.Model):
+    attempt = models.ForeignKey(PollAttempt, on_delete=models.CASCADE, related_name="answers", verbose_name="Проходження")
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name="answers", verbose_name="Запитання")
+    choice = models.ForeignKey(Choice, on_delete=models.CASCADE, related_name="answers", verbose_name="Обрана відповідь")
+
+    class Meta:
+        verbose_name = "Відповідь"
+        verbose_name_plural = "Відповіді"
+        constraints = [
+            models.UniqueConstraint(fields=["attempt", "question"], name="one_answer_per_question_attempt")
+        ]
+
+    def __str__(self):
+        return f"{self.question}: {self.choice}"

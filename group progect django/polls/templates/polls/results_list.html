@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container py-4">
+  <h1>Результати опитувань</h1>
+  <form method="get" class="row g-2 mb-3">
+    <div class="col-auto"><select name="poll" class="form-select"><option value="">Усі опитування</option>
+      {% for poll in polls %}<option value="{{ poll.pk }}" {% if request.GET.poll == poll.pk|stringformat:"s" %}selected{% endif %}>{{ poll.title }}</option>{% endfor %}
+    </select></div>
+    <div class="col-auto"><select name="status" class="form-select"><option value="">Усі статуси</option>
+      <option value="completed" {% if request.GET.status == "completed" %}selected{% endif %}>Завершено</option>
+      <option value="in_progress" {% if request.GET.status == "in_progress" %}selected{% endif %}>У процесі</option>
+    </select></div>
+    <div class="col-auto"><button class="btn btn-primary">Фільтрувати</button></div>
+  </form>
+  <div class="table-responsive"><table class="table table-striped">
+    <thead><tr><th>Опитування</th><th>Користувач</th><th>Статус</th><th>Початок</th><th>Завершення</th><th>Відповідей</th></tr></thead>
+    <tbody>{% for attempt in attempts %}
+      <tr><td>{{ attempt.poll.title }}</td><td><a href="{% url 'polls:result-detail' attempt.pk %}">{{ attempt.user.username }}</a></td><td>{{ attempt.get_status_display }}</td><td>{{ attempt.started_at|date:"d.m.Y H:i" }}</td><td>{{ attempt.completed_at|date:"d.m.Y H:i"|default:"—" }}</td><td>{{ attempt.answers.count }}</td></tr>
+    {% empty %}<tr><td colspan="6">Результатів поки немає.</td></tr>{% endfor %}</tbody>
+  </table></div>
+</div>
+{% endblock %}

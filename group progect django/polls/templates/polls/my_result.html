@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container py-4">
+  <h1>Ваш результат: {{ poll.title }}</h1>
+  <p>Відповіли на {{ answered_count }} із {{ question_count }} запитань.</p>
+  <h2 class="h4">Ваші відповіді</h2>
+  <ul class="list-group mb-3">
+    {% for answer in answers %}
+      <li class="list-group-item"><strong>{{ answer.question.text }}</strong><br>{{ answer.choice.text }}</li>
+    {% empty %}<li class="list-group-item">Відповідей немає.</li>{% endfor %}
+  </ul>
+  <a class="btn btn-outline-primary" href="{% url 'polls:poll-detail' poll.pk %}">До опитування</a>
+</div>
+{% endblock %}

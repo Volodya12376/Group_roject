@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container py-4">
+  <h1>{{ poll.title }}</h1>
+  <p>Запитання {{ step }} із {{ total_steps }}</p>
+  <div class="progress mb-3" role="progressbar" aria-valuenow="{{ step }}" aria-valuemin="0" aria-valuemax="{{ total_steps }}">
+    <div class="progress-bar" style="width: {% widthratio step total_steps 100 %}%"></div>
+  </div>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div class="d-flex gap-2">
+      {% if step > 1 %}<a class="btn btn-outline-secondary" href="{% url 'polls:poll-step' poll.pk step|add:'-1' %}">Назад</a>{% endif %}
+      <button class="btn btn-primary" type="submit">{% if step == total_steps %}Завершити{% else %}Далі{% endif %}</button>
+    </div>
+  </form>
+</div>
+{% endblock %}
