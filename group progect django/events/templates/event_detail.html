@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Видалення події</title>
+    <link rel="stylesheet" href="{% static 'events/style.css' %}">
+</head>
+<body>
+
+<header class="navbar">
+    <span class="logo">Портал подій</span>
+    <nav>
+        <a href="{% url 'event_list' %}">Головна</a>
+        <a href="{% url 'event_calendar' %}">Календар</a>
+    </nav>
+</header>
+
+<main class="container">
+
+    <div class="delete-card">
+        <h1>Видалити подію?</h1>
+
+        <p>
+            Ти справді хочеш видалити
+            <strong>{{ object.title }}</strong>?
+        </p>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="actions" style="justify-content:center;">
+                <button class="btn btn-danger" type="submit">
+                    Так, видалити
+                </button>
+
+                <a class="btn btn-secondary" href="{% url 'event_list' %}">
+                    Скасувати
+                </a>
+            </div>
+        </form>
+    </div>
+
+</main>
+</body>
+</html>

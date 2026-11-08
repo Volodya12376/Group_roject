@@ -1,0 +1,86 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Календар подій</title>
+    <link rel="stylesheet" href="{% static 'events/style.css' %}">
+</head>
+<body>
+
+<header class="navbar">
+    <span class="logo">Портал подій</span>
+    <nav>
+        <a href="{% url 'event_list' %}">Головна</a>
+        <a href="{% url 'event_calendar' %}">Календар</a>
+    </nav>
+</header>
+
+<main class="container">
+
+    <section class="hero">
+        <h1>Календар подій</h1>
+        <p>Усі заплановані заходи в одному місці.</p>
+    </section>
+
+    <div class="calendar-card">
+
+        <div class="calendar-header">
+            <h2>{{ calendar_month }} / {{ calendar_year }}</h2>
+
+            <div class="calendar-nav">
+                <a class="btn btn-secondary"
+                   href="?month={{ previous_month.month }}&year={{ previous_month.year }}">
+                    ← Попередній
+                </a>
+
+                <a class="btn"
+                   href="?month={{ next_month.month }}&year={{ next_month.year }}">
+                    Наступний →
+                </a>
+            </div>
+        </div>
+
+        <table class="calendar-table">
+            <tr>
+                <th>Пн</th>
+                <th>Вт</th>
+                <th>Ср</th>
+                <th>Чт</th>
+                <th>Пт</th>
+                <th>Сб</th>
+                <th>Нд</th>
+            </tr>
+
+            {% for week in calendar_weeks %}
+            <tr>
+                {% for day in week %}
+                <td>
+                    {% if day.day %}
+                        <strong>{{ day.day }}</strong>
+
+                        {% for event in day.events %}
+                            <div class="event">
+                                <a href="{% url 'event_detail' event.pk %}">
+                                    {{ event.title }}
+                                </a>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="actions">
+        <a class="btn btn-secondary" href="{% url 'event_list' %}">
+            ← Назад
+        </a>
+    </div>
+
+</main>
+</body>
+</html>

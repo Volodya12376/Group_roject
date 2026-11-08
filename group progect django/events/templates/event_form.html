@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ event.title }}</title>
+    <link rel="stylesheet" href="{% static 'events/style.css' %}">
+</head>
+<body>
+
+<header class="navbar">
+    <span class="logo">Портал подій</span>
+    <nav>
+        <a href="{% url 'event_list' %}">Головна</a>
+        <a href="{% url 'event_calendar' %}">Календар</a>
+    </nav>
+</header>
+
+<main class="container">
+
+    <section class="hero">
+        <h1>Інформація про подію</h1>
+        <p>Детальна інформація про обраний захід.</p>
+    </section>
+
+    <div class="detail-card">
+        <h1>{{ event.title }}</h1>
+
+        <div class="detail-info">
+            <strong>Опис:</strong>
+            <p>{{ event.description|default:"Опис відсутній" }}</p>
+        </div>
+
+        <div class="detail-info">
+            <strong>Місце проведення:</strong>
+            <p>{{ event.location|default:"Не вказано" }}</p>
+        </div>
+
+        <div class="detail-info">
+            <strong>Початок:</strong>
+            <p>{{ event.starts_at|date:"d.m.Y H:i" }}</p>
+        </div>
+
+        {% if event.ends_at %}
+        <div class="detail-info">
+            <strong>Завершення:</strong>
+            <p>{{ event.ends_at|date:"d.m.Y H:i" }}</p>
+        </div>
+        {% endif %}
+
+        <div class="actions">
+            <a class="btn btn-secondary" href="{% url 'event_list' %}">
+                ← Назад
+            </a>
+
+            {% if can_manage_events %}
+                <a class="btn" href="{% url 'event_update' event.pk %}">
+                    Редагувати
+                </a>
+
+                <a class="btn btn-danger" href="{% url 'event_delete' event.pk %}">
+                    Видалити
+                </a>
+            {% endif %}
+        </div>
+    </div>
+
+</main>
+</body>
+</html>

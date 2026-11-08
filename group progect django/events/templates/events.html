@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Подія</title>
+    <link rel="stylesheet" href="{% static 'events/style.css' %}">
+</head>
+<body>
+
+<header class="navbar">
+    <span class="logo">Портал подій</span>
+    <nav>
+        <a href="{% url 'event_list' %}">Головна</a>
+        <a href="{% url 'event_calendar' %}">Календар</a>
+    </nav>
+</header>
+
+<main class="container">
+
+    <div class="form-card">
+        <h1>
+            {% if object %}Редагування події{% else %}Створення події{% endif %}
+        </h1>
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <div class="actions">
+                <button class="btn" type="submit">Зберегти</button>
+                <a class="btn btn-secondary" href="{% url 'event_list' %}">
+                    Скасувати
+                </a>
+            </div>
+        </form>
+    </div>
+
+</main>
+</body>
+</html>
