@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Список учнів | Електронний журнал{% endblock %}
+{% block students_active %}active{% endblock %}
+
+{% block hero %}
+<section class="hero">
+    <div class="container">
+        <div class="d-flex align-items-center gap-3">
+            <div class="hero-icon"><i class="bi bi-people-fill"></i></div>
+            <div>
+                <h1 class="h3 fw-bold mb-1">Список учнів</h1>
+                <p class="mb-0 opacity-75">Перегляд учнів та їхніх навчальних результатів</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block content %}
+<div class="section-heading">
+    <div>
+        <h2 class="h5 fw-bold mb-1">Учні</h2>
+        <p class="text-muted mb-0">Оберіть учня, щоб переглянути його оцінки</p>
+    </div>
+    <span class="count-badge"><i class="bi bi-person-check me-1"></i>{{ students|length }} учнів</span>
+</div>
+
+<div class="row g-3">
+    {% for student in students %}
+    <div class="col-sm-6 col-lg-4">
+        <a class="student-card" href="{% url 'student_marks' student.id %}">
+            <div class="student-avatar"><i class="bi bi-person-fill"></i></div>
+            <div class="student-info">
+                <div class="fw-semibold text-dark">{{ student.get_full_name|default:student.username }}</div>
+                <div class="small text-muted">@{{ student.username }}</div>
+            </div>
+            <i class="bi bi-chevron-right card-arrow"></i>
+        </a>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="empty-state">
+            <i class="bi bi-people"></i>
+            <h3 class="h5 mt-3">Учнів поки немає</h3>
+            <p class="text-muted mb-0">Коли в журналі з'являться оцінки, тут відобразяться учні.</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
