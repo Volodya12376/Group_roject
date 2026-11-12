@@ -1,0 +1,162 @@
+{% load tz %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Форум групи</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f7fc;
+            color: #1e293b;
+        }
+
+        .header {
+            background: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 22px 7%;
+        }
+
+        .logo {
+            color: #2563eb;
+            font-size: 23px;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 45px auto;
+            padding: 0 20px;
+        }
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+        }
+
+        h1 {
+            margin: 0 0 8px;
+            font-size: 32px;
+        }
+
+        .subtitle {
+            margin: 0;
+            color: #64748b;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 13px 20px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        .button:hover {
+            background: #1d4ed8;
+        }
+
+        .topic {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 3px 12px rgba(15, 23, 42, 0.04);
+        }
+
+        .topic h2 {
+            margin: 0 0 12px;
+            color: #1d4ed8;
+            font-size: 21px;
+            overflow-wrap: anywhere;
+        }
+
+        .topic p {
+            line-height: 1.7;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        .date {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .empty {
+            text-align: center;
+            background: white;
+            border: 1px dashed #cbd5e1;
+            border-radius: 14px;
+            padding: 40px 20px;
+            color: #64748b;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                margin-top: 28px;
+            }
+
+            h1 {
+                font-size: 27px;
+            }
+
+            .top {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">Форум групи</div>
+    </header>
+
+    <main class="container">
+        <div class="top">
+            <div>
+                <h1>Форум групи</h1>
+                <p class="subtitle">
+                    Обговорюймо навчання та ділимося думками
+                </p>
+            </div>
+
+            <a class="button" href="{% url 'forum:topic_create' %}">
+                + Створити тему
+            </a>
+        </div>
+
+        {% for topic in topics %}
+            <article class="topic">
+                <h2>{{ topic.title }}</h2>
+                <p>{{ topic.content }}</p>
+                <div class="date">
+                    Опубліковано: {% timezone "Europe/Kyiv" %}{{ topic.created_at|date:"d.m.Y H:i" }}{% endtimezone %}
+                </div>
+            </article>
+        {% empty %}
+            <div class="empty">
+                <h2>Поки що тем немає</h2>
+                <p>Створи першу тему форуму!</p>
+            </div>
+        {% endfor %}
+    </main>
+</body>
+</html>
+
