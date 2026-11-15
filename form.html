@@ -1,0 +1,22 @@
+
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+
+<h2 class="section-title">{{ title }}</h2>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    <button type="submit" class="btn">Зберегти проєкт</button>
+
+    <a href="{% url 'portfolio_list' %}" class="btn btn-secondary">
+        Назад
+    </a>
+</form>
+
+{% endblock %}

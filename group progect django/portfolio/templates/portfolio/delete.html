@@ -1,0 +1,29 @@
+
+{% extends 'base.html' %}
+
+{% block title %}Видалення проєкту{% endblock %}
+
+{% block content %}
+
+<div class="card">
+    <h2 class="section-title">Видалити проєкт?</h2>
+
+    <p>
+        Ти впевнений, що хочеш видалити
+        <strong>{{ portfolio.title }}</strong>?
+    </p>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <button type="submit" class="btn btn-danger">
+            Так, видалити
+        </button>
+
+        <a href="{% url 'portfolio_list' %}" class="btn btn-secondary">
+            Скасувати
+        </a>
+    </form>
+</div>
+
+{% endblock %}

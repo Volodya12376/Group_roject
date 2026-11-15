@@ -1,0 +1,74 @@
+
+{% extends 'base.html' %}
+
+{% block title %}Мої проєкти{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+    <h2>Ласкаво просимо до Portfolio!</h2>
+    <p>
+        Тут зібрані цікаві проєкти, творчі роботи та досягнення.
+        Переглядай роботи та ділися власними проєктами!
+    </p>
+
+    <a href="{% url 'portfolio_create' %}" class="btn">
+        + Додати проєкт
+    </a>
+</section>
+
+<h2 class="section-title">Наші проєкти</h2>
+
+<div class="projects">
+
+    {% for portfolio in portfolios %}
+        <div class="card">
+
+            <h3>{{ portfolio.title }}</h3>
+
+            <p>{{ portfolio.description }}</p>
+
+            {% if portfolio.screenshot %}
+                <img src="{{ portfolio.screenshot.url }}" alt="Скріншот проєкту">
+            {% endif %}
+
+            <p>Автор: {{ portfolio.user.username }}</p>
+
+            {% if portfolio.link %}
+                <p>
+                    <a href="{{ portfolio.link }}" target="_blank">
+                        Переглянути проєкт →
+                    </a>
+                </p>
+            {% endif %}
+
+            {% if portfolio.file %}
+                <p>
+                    <a href="{{ portfolio.file.url }}" download>
+                        Завантажити файл ↓
+                    </a>
+                </p>
+            {% endif %}
+
+            {% if user == portfolio.user %}
+                <a href="{% url 'portfolio_edit' portfolio.pk %}" class="btn">
+                    Редагувати
+                </a>
+
+                <a href="{% url 'portfolio_delete' portfolio.pk %}" class="btn btn-danger">
+                    Видалити
+                </a>
+            {% endif %}
+
+        </div>
+
+    {% empty %}
+        <div class="card">
+            <h3>Поки що немає проєктів</h3>
+            <p>Стань першим, хто додасть власну роботу!</p>
+        </div>
+    {% endfor %}
+
+</div>
+
+{% endblock %}

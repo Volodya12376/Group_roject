@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оголошення — Портал групи</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #1e3a5f;
+            --primary-light: #2c5282;
+            --accent: #3182ce;
+            --bg-soft: #f7fafc;
+            --card-shadow: 0 4px 20px rgba(30, 58, 95, 0.08);
+        }
+
+        body {
+            background: var(--bg-soft);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            color: #2d3748;
+        }
+
+        .navbar-custom {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-link {
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #90cdf4 !important;
+        }
+
+        .page-hero {
+            background: linear-gradient(135deg, #1e3a5f 0%, #2b6cb0 60%, #4299e1 100%);
+            color: white;
+            padding: 2.8rem 0;
+            border-radius: 0 0 1.5rem 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .page-hero h1 {
+            font-weight: 800;
+            font-size: 2.2rem;
+        }
+
+        .page-hero p {
+            opacity: 0.9;
+            max-width: 650px;
+        }
+
+        .section-card {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: var(--card-shadow);
+            border: none;
+        }
+
+        .section-card .card-header {
+            background: transparent;
+            border-bottom: 1px solid #edf2f7;
+            font-weight: 700;
+            color: var(--primary);
+            padding: 1rem 1.25rem;
+        }
+
+        .section-card .card-header i {
+            color: var(--accent);
+            font-size: 1.2rem;
+        }
+
+        .announcement-item {
+            padding: 1.25rem 0;
+            border-bottom: 1px solid #edf2f7;
+        }
+
+        .announcement-item:first-child {
+            padding-top: 0;
+        }
+
+        .announcement-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .announcement-title {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.15rem;
+            text-decoration: none;
+        }
+
+        .announcement-title:hover {
+            color: var(--accent);
+        }
+
+        .announcement-meta {
+            color: #718096;
+            font-size: 0.82rem;
+        }
+
+        .announcement-content {
+            color: #4a5568;
+            line-height: 1.7;
+            margin-top: 0.7rem;
+        }
+
+        .badge-pinned {
+            background: #ed8936;
+            color: white;
+            font-size: 0.7rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-light);
+            border-color: var(--primary-light);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .form-control {
+            border-color: #e2e8f0;
+            padding: 0.7rem 0.9rem;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 0.2rem rgba(49, 130, 206, 0.15);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #718096;
+        }
+
+        footer {
+            background: var(--primary);
+            color: #a0aec0;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        footer a {
+            color: #90cdf4;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+
+<nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <i class="bi bi-people-fill me-2"></i>Портал групи
+        </a>
+
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse" data-bs-target="#mainNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mainNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link" href="/">Головна</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Форум</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Щоденник</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Події</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Опитування</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Голосування</a></li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'announcement_list' %}">Оголошення</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'material_list' %}">Матеріали</a>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="#">Портфоліо</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Галерея</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<section class="page-hero">
+    <div class="container">
+        <h1 class="mb-3">
+            <i class="bi bi-megaphone-fill me-2"></i>Оголошення
+        </h1>
+        <p class="lead mb-0">
+            Важлива інформація, новини та повідомлення для студентів групи.
+        </p>
+    </div>
+</section>
+
+
+<main class="container pb-5">
+
+
+    <div class="card section-card mb-4">
+        <div class="card-body p-4">
+            <form method="get" action="{% url 'announcement_list' %}">
+                <div class="row g-2">
+                    <div class="col-md-9">
+                        <input
+                            type="text"
+                            name="q"
+                            class="form-control"
+                            placeholder="Пошук оголошень..."
+                            value="{{ search_query }}">
+                    </div>
+
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-search me-1"></i>Знайти
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="card section-card">
+        <div class="card-header d-flex align-items-center">
+            <i class="bi bi-megaphone-fill me-2"></i>
+            Усі оголошення
+
+            <a href="{% url 'announcement_create' %}"
+               class="btn btn-primary btn-sm ms-auto">
+                <i class="bi bi-plus-lg me-1"></i>Створити
+            </a>
+        </div>
+
+        <div class="card-body p-4">
+
+            {% for announcement in announcements %}
+
+                <article class="announcement-item">
+
+                    <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+
+                        <a href="{% url 'announcement_detail' announcement.pk %}"
+                           class="announcement-title">
+                            {{ announcement.title }}
+                        </a>
+
+                        {% if announcement.is_pinned %}
+                            <span class="badge badge-pinned">
+                                <i class="bi bi-pin-angle-fill me-1"></i>Закріплене
+                            </span>
+                        {% endif %}
+
+                    </div>
+
+                    <div class="announcement-meta mt-2">
+                        <i class="bi bi-person me-1"></i>
+                        {% if announcement.author %}
+                            {{ announcement.author.get_username }}
+                        {% else %}
+                            Адміністрація
+                        {% endif %}
+
+                        <span class="mx-2">·</span>
+
+                        <i class="bi bi-clock me-1"></i>
+                        {{ announcement.published_at|date:"d.m.Y H:i" }}
+                    </div>
+
+                    <p class="announcement-content mb-2">
+                        {{ announcement.content|truncatewords:40 }}
+                    </p>
+
+                    <a href="{% url 'announcement_detail' announcement.pk %}"
+                       class="btn btn-outline-primary btn-sm">
+                        Читати повністю <i class="bi bi-arrow-right ms-1"></i>
+                    </a>
+
+                </article>
+
+            {% empty %}
+
+                <div class="empty-state">
+                    <i class="bi bi-megaphone display-4"></i>
+                    <h5 class="mt-3">Оголошень поки немає</h5>
+                    <p class="mb-0">
+                        Нові повідомлення з'являтимуться тут.
+                    </p>
+                </div>
+
+            {% endfor %}
+
+        </div>
+    </div>
+
+</main>
+
+
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h5 class="text-white mb-3">Портал групи</h5>
+                <p class="small mb-0">
+                    Навчальний проєкт · Django + Bootstrap
+                </p>
+            </div>
+
+            <div class="col-md-6 text-md-end">
+                <div class="mb-2">
+                    <a href="#">Форум</a> ·
+                    <a href="{% url 'material_list' %}">Матеріали</a> ·
+                    <a href="#">Галерея</a>
+                </div>
+                <div class="small">© 2026 Портал групи</div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

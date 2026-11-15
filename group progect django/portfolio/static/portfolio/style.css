@@ -1,0 +1,220 @@
+
+/* ОСНОВА */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif !important;
+}
+
+body {
+    background: #f3f7fd;
+    color: #263b59;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.6;
+}
+
+/* ШАПКА */
+
+header {
+    background: #ffffff;
+    border-bottom: 1px solid #dce6f2;
+    padding: 22px 8%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    color: #2457a7;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+nav {
+    display: flex;
+    gap: 30px;
+}
+
+nav a {
+    color: #344d70;
+    text-decoration: none;
+    font-size: 15px;
+}
+
+nav a:hover {
+    color: #2563eb;
+}
+
+/* ОСНОВНИЙ КОНТЕНТ */
+
+main {
+    width: 88%;
+    max-width: 1100px;
+    margin: 50px auto;
+    min-height: 55vh;
+}
+
+h2.section-title {
+    color: #173d70;
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 35px;
+}
+
+/* КАРТКИ ПРОЄКТІВ */
+
+.projects {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: 28px;
+}
+
+.card {
+    background: #ffffff;
+    border: 1px solid #dce6f2;
+    border-radius: 10px;
+    padding: 30px;
+    margin-bottom: 20px;
+}
+
+.card h3 {
+    color: #2457a7;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 22px;
+}
+
+.card p {
+    color: #526985;
+    font-size: 15px;
+    line-height: 1.8;
+    margin-bottom: 24px;
+}
+
+.card img {
+    width: 100%;
+    max-height: 230px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin: 12px 0 25px;
+}
+
+.card a:not(.btn) {
+    color: #2563eb;
+    text-decoration: none;
+}
+
+/* КНОПКИ */
+
+.btn {
+    display: inline-block;
+    background: #2563eb;
+    color: #ffffff !important;
+    padding: 13px 22px;
+    border-radius: 7px;
+    border: none;
+    text-decoration: none;
+    font-size: 14px;
+    cursor: pointer;
+    margin: 8px 12px 12px 0;
+}
+
+.btn:hover {
+    background: #1d4ed8;
+}
+
+.btn-secondary {
+    background: #e3edfc;
+    color: #2457a7 !important;
+}
+
+.btn-secondary:hover {
+    background: #d1e2fa;
+}
+
+.btn-danger {
+    background: #dc4545;
+}
+
+/* ФОРМИ */
+
+form {
+    max-width: 700px;
+    background: #ffffff;
+    border: 1px solid #dce6f2;
+    border-radius: 10px;
+    padding: 35px;
+}
+
+form p {
+    color: #344d70;
+    margin-bottom: 28px;
+    line-height: 1.7;
+}
+
+input,
+textarea,
+select {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    margin-top: 12px;
+    background: #f8faff;
+    color: #263b59;
+    border: 1px solid #cbd9ec;
+    border-radius: 7px;
+    font-size: 15px;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: #2563eb;
+}
+
+textarea {
+    min-height: 140px;
+    resize: vertical;
+}
+
+/* НИЖНЯ ЧАСТИНА */
+
+footer {
+    text-align: center;
+    padding: 28px;
+    color: #7890ad;
+    border-top: 1px solid #dce6f2;
+    margin-top: 60px;
+    font-size: 14px;
+}
+
+/* МОБІЛЬНА ВЕРСІЯ */
+
+@media (max-width: 600px) {
+    header {
+        padding: 20px;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    nav {
+        gap: 18px;
+    }
+
+    main {
+        width: 92%;
+        margin: 30px auto;
+    }
+
+    .card {
+        padding: 22px;
+    }
+
+    form {
+        padding: 22px;
+    }
+}
