@@ -1,0 +1,80 @@
+
+{% extends "base.html" %}
+
+{% block title %}{{ poll.title }} — Голосування{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+    <div class="hero rounded-4 p-4 p-md-5 mb-4">
+        <h1 class="fw-bold">{{ poll.title }}</h1>
+
+        {% if poll.description %}
+            <p class="fs-5 mb-0">{{ poll.description }}</p>
+        {% else %}
+            <p class="mb-0">Обери свій варіант відповіді.</p>
+        {% endif %}
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-info rounded-3">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-body p-4 p-md-5">
+
+            <h4 class="fw-bold mb-4">Варіанти відповідей</h4>
+
+            <form method="post" action="{% url 'vote' poll.id %}">
+                {% csrf_token %}
+
+                {% for option in poll.options.all %}
+                    <label class="d-flex align-items-center gap-3 p-3 mb-3 border rounded-3"
+                           style="cursor: pointer; background: #f8fbff;">
+
+                        <input
+                            class="form-check-input mt-0"
+                            type="radio"
+                            name="choice"
+                            value="{{ option.id }}"
+                            required
+                        >
+
+                        <span class="fw-semibold">
+                            {{ option.text }}
+                        </span>
+                    </label>
+
+                {% empty %}
+                    <div class="alert alert-secondary">
+                        У цього опитування ще немає варіантів відповіді.
+                    </div>
+                {% endfor %}
+
+                <div class="d-flex flex-wrap gap-2 mt-4">
+                    <button type="submit" class="btn btn-primary px-4 py-2">
+                        Проголосувати
+                    </button>
+
+                    <a href="{% url 'results' poll.id %}"
+                       class="btn btn-outline-primary px-4 py-2">
+                        Переглянути результати
+                    </a>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a href="{% url 'poll_list' %}" class="text-decoration-none">
+            ← Назад до опитувань
+        </a>
+    </div>
+
+</div>
+{% endblock %}

@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import ListView
-from app.models import Marks
+from .models import Marks
 from django.contrib.auth.models import User
 
 class MarksListView(ListView):

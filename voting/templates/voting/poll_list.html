@@ -1,0 +1,67 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4">
+
+    <div class="p-4 p-md-5 mb-4 text-white rounded-4"
+         style="background: linear-gradient(120deg, #214875, #4198df);">
+        <h1 class="fw-bold">Система голосування</h1>
+        <p class="fs-5 mb-0">
+            Обирай варіанти, голосуй та переглядай результати опитувань.
+        </p>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">Доступні опитування</h2>
+    </div>
+
+    <div class="row g-4">
+        {% for poll in polls %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card border-0 shadow-sm rounded-4 h-100">
+                    <div class="card-body p-4">
+
+                        <h4 class="fw-bold mb-3">
+                            {{ poll.title }}
+                        </h4>
+
+                        {% if poll.description %}
+                            <p class="text-muted">
+                                {{ poll.description }}
+                            </p>
+                        {% else %}
+                            <p class="text-muted">
+                                Опис відсутній.
+                            </p>
+                        {% endif %}
+
+                        <div class="d-grid gap-2 mt-4">
+                            <a href="{% url 'poll_detail' poll.id %}"
+                               class="btn btn-primary">
+                                Проголосувати
+                            </a>
+
+                            <a href="{% url 'results' poll.id %}"
+                               class="btn btn-outline-primary">
+                                Переглянути результати
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <div class="card border-0 shadow-sm rounded-4 p-4 text-center">
+                    <h5>Опитувань поки немає</h5>
+                    <p class="text-muted mb-0">
+                        Нові опитування з'являться тут.
+                    </p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,22 @@
+
+<h1>Створити опитування</h1>
+
+{% if error %}
+    <p>{{ error }}</p>
+{% endif %}
+
+<form method="post">
+    {% csrf_token %}
+
+    <p>Запитання:</p>
+    <input type="text" name="question" required>
+
+    <p>Варіанти відповідей (кожен з нового рядка):</p>
+    <textarea name="choices" rows="6" required></textarea>
+
+    <p>
+        <button type="submit">Створити</button>
+    </p>
+</form>
+
+<a href="{% url 'poll_list' %}">Назад</a>

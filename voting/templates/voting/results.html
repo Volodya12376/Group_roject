@@ -1,0 +1,71 @@
+
+{% extends "base.html" %}
+
+{% block title %}Результати — {{ poll.title }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+    <div class="hero rounded-4 p-4 p-md-5 mb-4">
+        <h1 class="fw-bold">Результати голосування</h1>
+        <p class="fs-5 mb-0">{{ poll.title }}</p>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-body p-4 p-md-5">
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4 class="fw-bold mb-0">Підсумки</h4>
+
+                <span class="badge rounded-pill text-bg-primary px-3 py-2">
+                    {{ total_votes }} голосів
+                </span>
+            </div>
+
+            {% for option in options %}
+                <div class="mb-4">
+
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="fw-semibold">
+                            {{ option.text }}
+                        </span>
+
+                        <span class="fw-bold text-primary">
+                            {{ option.percent }}%
+                        </span>
+                    </div>
+
+                    <div class="progress rounded-pill"
+                         style="height: 12px; background: #e8edf3;">
+                        <div class="progress-bar rounded-pill"
+                             role="progressbar"
+                             style="width: {{ option.percent }}%;"
+                             aria-valuenow="{{ option.percent }}"
+                             aria-valuemin="0"
+                             aria-valuemax="100">
+                        </div>
+                    </div>
+
+                    <small class="text-muted">
+                        {{ option.vote_count }} голосів
+                    </small>
+
+                </div>
+            {% empty %}
+                <div class="alert alert-secondary">
+                    Варіантів відповіді поки немає.
+                </div>
+            {% endfor %}
+
+            <hr class="my-4">
+
+            <a href="{% url 'poll_list' %}"
+               class="btn btn-outline-primary px-4">
+                ← Назад до опитувань
+            </a>
+
+        </div>
+    </div>
+
+</div>
+{% endblock %}

@@ -23,6 +23,11 @@ INSTALLED_APPS = [
     "materials.apps.MaterialsConfig",
     "portfolio.apps.PortfolioConfig",
     "gallery.apps.GalleryConfig",
+
+    'events',
+    'academics',
+    'accounts',
+    'voting',
 ]
 
 MIDDLEWARE = [
