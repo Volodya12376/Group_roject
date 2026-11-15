@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     "materials.apps.MaterialsConfig",
     "portfolio.apps.PortfolioConfig",
     "gallery.apps.GalleryConfig",
+    "voting.apps.VotingConfig",
 
     'events',
     'academics',

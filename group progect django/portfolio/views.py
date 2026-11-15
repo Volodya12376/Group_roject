@@ -1,12 +1,13 @@
-
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Portfolio
+from .models import PortfolioProject
 from .forms import PortfolioForm
 
 
 def portfolio_list(request):
-    portfolios = Portfolio.objects.all().order_by("-created_at")
+    portfolios = PortfolioProject.objects.select_related(
+        "owner"
+    ).all()
 
     return render(request, "portfolio/list.html", {
         "portfolios": portfolios
@@ -15,11 +16,14 @@ def portfolio_list(request):
 
 @login_required
 def portfolio_create(request):
-    form = PortfolioForm(request.POST or None, request.FILES or None)
+    form = PortfolioForm(
+        request.POST or None,
+        request.FILES or None
+    )
 
     if form.is_valid():
         portfolio = form.save(commit=False)
-        portfolio.user = request.user
+        portfolio.owner = request.user
         portfolio.save()
         return redirect("portfolio_list")
 
@@ -32,7 +36,9 @@ def portfolio_create(request):
 @login_required
 def portfolio_edit(request, pk):
     portfolio = get_object_or_404(
-        Portfolio, pk=pk, user=request.user
+        PortfolioProject,
+        pk=pk,
+        owner=request.user
     )
 
     form = PortfolioForm(
@@ -54,7 +60,9 @@ def portfolio_edit(request, pk):
 @login_required
 def portfolio_delete(request, pk):
     portfolio = get_object_or_404(
-        Portfolio, pk=pk, user=request.user
+        PortfolioProject,
+        pk=pk,
+        owner=request.user
     )
 
     if request.method == "POST":

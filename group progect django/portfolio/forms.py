@@ -1,14 +1,16 @@
 from django import forms
-from .models import Portfolio
+from .models import PortfolioProject
 
 
 class PortfolioForm(forms.ModelForm):
     class Meta:
-        model = Portfolio
+        model = PortfolioProject
         fields = [
             "title",
             "description",
-            "screenshot",
-            "link",
-            "file"
+            "project_url",
+            "repository_url",
+            "preview_image",
+            "attachment",
+            "is_public",
         ]

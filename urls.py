@@ -15,18 +15,30 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
-from . import views
-
-app_name = "events"
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path("", views.EventListView.as_view(), name="event_list"),
-    path("calendar/", views.EventCalendarView.as_view(), name="event_calendar"),
-    path("<int:pk>/", views.EventDetailView.as_view(), name="event_detail"),
-    path("create/", views.EventCreateView.as_view(), name="event_create"),
-    path("<int:pk>/edit/", views.EventUpdateView.as_view(), name="event_update"),
-    path("<int:pk>/delete/", views.EventDeleteView.as_view(), name="event_delete"),
+    path("admin/", admin.site.urls),
+
+    path("", include("events.urls")),
+    path("accounts/", include("accounts.urls")),
+    path("academics/", include("academics.urls")),
+    path("forum/", include("forum.urls")),
+
+    path("materials/", include("materials.urls")),
+    path("announcements/", include("announcements.urls")),
+
+    path("portfolio/", include("portfolio.urls")),
+
+    path("polls/", include("polls.urls")),
+    path("voting/", include("voting.urls")),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(
+        settings.MEDIA_URL,
+        document_root=settings.MEDIA_ROOT
+    )
