@@ -1,19 +1,20 @@
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Календар подій</title>
-<link rel="stylesheet" href="{% static 'events/style.css' %}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Календар подій</title>
+    <link rel="stylesheet" href="{% static 'events/style.css' %}">
 </head>
 <body>
 
 <header class="navbar">
     <span class="logo">Портал групи — Події</span>
     <nav>
-        <a href="{% url 'event_list' %}">Події</a>
-        <a href="{% url 'event_calendar' %}">Календар</a>
+        <a href="{% url 'events:events' %}">Події</a>
+        <a href="{% url 'events:event_calendar' %}">Календар</a>
     </nav>
 </header>
 
@@ -62,7 +63,7 @@
 
                                     {% for event in day.events %}
                                         <div class="event">
-                                            <a href="{% url 'event_detail' event.pk %}">
+                                            <a href="{% url 'events:event_detail' event.pk %}">
                                                 {{ event.title }}
                                             </a>
                                         </div>
@@ -77,7 +78,8 @@
     </div>
 
     <div class="actions">
-        <a class="btn btn-secondary" href="{% url 'event_list' %}">
+        <a class="btn btn-secondary"
+           href="{% url 'events:events' %}">
             ← До подій
         </a>
     </div>

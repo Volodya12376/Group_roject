@@ -1,19 +1,20 @@
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Видалити подію</title>
-<link rel="stylesheet" href="{% static 'events/style.css' %}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Видалити подію</title>
+    <link rel="stylesheet" href="{% static 'events/style.css' %}">
 </head>
 <body>
 
 <header class="navbar">
     <span class="logo">Портал групи — Події</span>
     <nav>
-        <a href="{% url 'event_list' %}">Події</a>
-        <a href="{% url 'event_calendar' %}">Календар</a>
+        <a href="{% url 'events:events' %}">Події</a>
+        <a href="{% url 'events:event_calendar' %}">Календар</a>
     </nav>
 </header>
 
@@ -28,18 +29,20 @@
 
         <form method="post">
             {% csrf_token %}
+
             <div class="actions">
                 <button class="btn btn-danger" type="submit">
                     Так, видалити
                 </button>
 
                 <a class="btn btn-secondary"
-                   href="{% url 'event_detail' object.pk %}">
+                   href="{% url 'events:event_detail' object.pk %}">
                     Скасувати
                 </a>
             </div>
         </form>
     </div>
 </main>
+
 </body>
 </html>

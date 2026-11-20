@@ -1,19 +1,20 @@
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Події групи</title>
-<link rel="stylesheet" href="{% static 'events/style.css' %}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Події групи</title>
+    <link rel="stylesheet" href="{% static 'events/style.css' %}">
 </head>
 <body>
 
 <header class="navbar">
     <span class="logo">Портал групи — Події</span>
     <nav>
-        <a href="{% url 'events' %}">Події</a>
-        <a href="{% url 'event_calendar' %}">Календар</a>
+        <a href="{% url 'events:events' %}">Події</a>
+        <a href="{% url 'events:event_calendar' %}">Календар</a>
     </nav>
 </header>
 
@@ -24,8 +25,12 @@
     </section>
 
     <div class="actions">
-        <a class="btn" href="{% url 'event_create' %}">Створити подію</a>
-        <a class="btn btn-secondary" href="{% url 'event_calendar' %}">
+        <a class="btn" href="{% url 'events:event_create' %}">
+            Створити подію
+        </a>
+
+        <a class="btn btn-secondary"
+           href="{% url 'events:event_calendar' %}">
             Відкрити календар
         </a>
     </div>
@@ -33,12 +38,14 @@
     {% for event in events %}
         <article class="detail-card">
             <h2>
-                <a href="{% url 'event_detail' event.pk %}">
+                <a href="{% url 'events:event_detail' event.pk %}">
                     {{ event.title }}
                 </a>
             </h2>
 
-            <p>{{ event.description|default:"Опис відсутній"|truncatewords:35 }}</p>
+            <p>
+                {{ event.description|default:"Опис відсутній"|truncatewords:35 }}
+            </p>
 
             <p>
                 <strong>Місце:</strong>
@@ -50,7 +57,8 @@
                 {{ event.starts_at|date:"d.m.Y H:i" }}
             </p>
 
-            <a class="btn" href="{% url 'event_detail' event.pk %}">
+            <a class="btn"
+               href="{% url 'events:event_detail' event.pk %}">
                 Детальніше
             </a>
         </article>
@@ -59,7 +67,7 @@
             <p>Поки що подій немає.</p>
         </div>
     {% endfor %}
-
 </main>
+
 </body>
 </html>

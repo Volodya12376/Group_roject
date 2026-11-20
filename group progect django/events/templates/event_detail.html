@@ -1,19 +1,20 @@
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{{ event.title }}</title>
-<link rel="stylesheet" href="{% static 'events/style.css' %}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ event.title }}</title>
+    <link rel="stylesheet" href="{% static 'events/style.css' %}">
 </head>
 <body>
 
 <header class="navbar">
     <span class="logo">Портал групи — Події</span>
     <nav>
-        <a href="{% url 'event_list' %}">Події</a>
-        <a href="{% url 'event_calendar' %}">Календар</a>
+        <a href="{% url 'events:events' %}">Події</a>
+        <a href="{% url 'events:event_calendar' %}">Календар</a>
     </nav>
 </header>
 
@@ -42,21 +43,25 @@
         {% endif %}
 
         <div class="actions">
-            <a class="btn btn-secondary" href="{% url 'event_list' %}">
+            <a class="btn btn-secondary"
+               href="{% url 'events:events' %}">
                 ← Назад
             </a>
 
             {% if can_manage_events %}
-                <a class="btn" href="{% url 'event_update' event.pk %}">
+                <a class="btn"
+                   href="{% url 'events:event_update' event.pk %}">
                     Редагувати
                 </a>
 
-                <a class="btn btn-danger" href="{% url 'event_delete' event.pk %}">
+                <a class="btn btn-danger"
+                   href="{% url 'events:event_delete' event.pk %}">
                     Видалити
                 </a>
             {% endif %}
         </div>
     </div>
 </main>
+
 </body>
 </html>
