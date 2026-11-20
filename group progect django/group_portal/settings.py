@@ -25,10 +25,6 @@ INSTALLED_APPS = [
     "gallery.apps.GalleryConfig",
     "voting.apps.VotingConfig",
 
-    'events',
-    'academics',
-    'accounts',
-    'voting',
 ]
 
 MIDDLEWARE = [

@@ -12,7 +12,7 @@
 <header class="navbar">
     <span class="logo">Портал подій</span>
     <nav>
-        <a href="{% url 'event_list' %}">Головна</a>
+        <a href="{% url 'events' %}">Головна</a>
         <a href="{% url 'event_calendar' %}">Календар</a>
     </nav>
 </header>
@@ -30,7 +30,7 @@
 
             <div class="actions">
                 <button class="btn" type="submit">Зберегти</button>
-                <a class="btn btn-secondary" href="{% url 'event_list' %}">
+                <a class="btn btn-secondary" href="{% url 'events' %}">
                     Скасувати
                 </a>
             </div>

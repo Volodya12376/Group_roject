@@ -1,8 +1,7 @@
 from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-from django.contrib.auth.models import User
-
+from django.conf import settings
 
 class Urok(models.Model):
     name = models.CharField(max_length=30, primary_key=True)
@@ -13,7 +12,7 @@ class Marks(models.Model):
     lesson = models.ForeignKey(Urok, on_delete=models.CASCADE)
     lesson_theme = models.CharField(max_length=100, null=True, blank=True)
     lesson_date = models.DateField(null=True, blank=True)
-    student = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={"is_superuser": False})
+    student = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     mark = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
 
 
