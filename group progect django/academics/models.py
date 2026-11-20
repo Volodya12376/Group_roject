@@ -1,26 +1,34 @@
 from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-from django.conf import settings
+
 
 class Urok(models.Model):
     name = models.CharField(max_length=30, primary_key=True)
-    #teacher = models.ForeignKey
+
+    # teacher = models.ForeignKey
+
 
 class Marks(models.Model):
     id = models.AutoField(primary_key=True)
     lesson = models.ForeignKey(Urok, on_delete=models.CASCADE)
     lesson_theme = models.CharField(max_length=100, null=True, blank=True)
     lesson_date = models.DateField(null=True, blank=True)
-    student = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
-    mark = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
-
-
+    student = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+    mark = models.IntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(5)]
+    )
 
 
 class Subject(models.Model):
-
-    name = models.CharField("Назва предмета", max_length=120, unique=True)
+    name = models.CharField(
+        "Назва предмета",
+        max_length=120,
+        unique=True
+    )
     description = models.TextField("Опис", blank=True)
     teacher = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -41,7 +49,6 @@ class Subject(models.Model):
 
 
 class Grade(models.Model):
-
     student = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -67,7 +74,11 @@ class Grade(models.Model):
         validators=[MinValueValidator(1), MaxValueValidator(12)],
     )
     date = models.DateField("Дата оцінювання")
-    topic = models.CharField("Тема / вид роботи", max_length=200, blank=True)
+    topic = models.CharField(
+        "Тема / вид роботи",
+        max_length=200,
+        blank=True
+    )
     comment = models.TextField("Коментар", blank=True)
     created_at = models.DateTimeField("Створено", auto_now_add=True)
     updated_at = models.DateTimeField("Оновлено", auto_now=True)

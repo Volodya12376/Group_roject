@@ -2,46 +2,61 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Видалення події</title>
-    <link rel="stylesheet" href="{% static 'events/style.css' %}">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ event.title }}</title>
+<link rel="stylesheet" href="{% static 'events/style.css' %}">
 </head>
 <body>
 
 <header class="navbar">
-    <span class="logo">Портал подій</span>
+    <span class="logo">Портал групи — Події</span>
     <nav>
-        <a href="{% url 'event_list' %}">Головна</a>
+        <a href="{% url 'event_list' %}">Події</a>
         <a href="{% url 'event_calendar' %}">Календар</a>
     </nav>
 </header>
 
 <main class="container">
+    <section class="hero">
+        <h1>{{ event.title }}</h1>
+        <p>{{ event.description|default:"Опис відсутній" }}</p>
+    </section>
 
-    <div class="delete-card">
-        <h1>Видалити подію?</h1>
-
+    <div class="detail-card">
         <p>
-            Ти справді хочеш видалити
-            <strong>{{ object.title }}</strong>?
+            <strong>Місце:</strong>
+            {{ event.location|default:"Не вказано" }}
         </p>
 
-        <form method="post">
-            {% csrf_token %}
+        <p>
+            <strong>Початок:</strong>
+            {{ event.starts_at|date:"d.m.Y H:i" }}
+        </p>
 
-            <div class="actions" style="justify-content:center;">
-                <button class="btn btn-danger" type="submit">
-                    Так, видалити
-                </button>
+        {% if event.ends_at %}
+            <p>
+                <strong>Завершення:</strong>
+                {{ event.ends_at|date:"d.m.Y H:i" }}
+            </p>
+        {% endif %}
 
-                <a class="btn btn-secondary" href="{% url 'event_list' %}">
-                    Скасувати
+        <div class="actions">
+            <a class="btn btn-secondary" href="{% url 'event_list' %}">
+                ← Назад
+            </a>
+
+            {% if can_manage_events %}
+                <a class="btn" href="{% url 'event_update' event.pk %}">
+                    Редагувати
                 </a>
-            </div>
-        </form>
-    </div>
 
+                <a class="btn btn-danger" href="{% url 'event_delete' event.pk %}">
+                    Видалити
+                </a>
+            {% endif %}
+        </div>
+    </div>
 </main>
 </body>
 </html>

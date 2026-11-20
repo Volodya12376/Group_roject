@@ -1,7 +1,10 @@
 from django.test import TestCase
-from django.contrib.auth.models import User
-from .models import Urok, Marks
+from django.contrib.auth import get_user_model
 from datetime import date
+
+from .models import Urok, Marks
+
+User = get_user_model()
 
 
 class MarksModelTest(TestCase):

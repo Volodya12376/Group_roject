@@ -2,40 +2,63 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Подія</title>
-    <link rel="stylesheet" href="{% static 'events/style.css' %}">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Події групи</title>
+<link rel="stylesheet" href="{% static 'events/style.css' %}">
 </head>
 <body>
 
 <header class="navbar">
-    <span class="logo">Портал подій</span>
+    <span class="logo">Портал групи — Події</span>
     <nav>
-        <a href="{% url 'events' %}">Головна</a>
+        <a href="{% url 'events' %}">Події</a>
         <a href="{% url 'event_calendar' %}">Календар</a>
     </nav>
 </header>
 
 <main class="container">
+    <section class="hero">
+        <h1>Події групи</h1>
+        <p>Усі заплановані заходи в одному місці.</p>
+    </section>
 
-    <div class="form-card">
-        <h1>
-            {% if object %}Редагування події{% else %}Створення події{% endif %}
-        </h1>
-
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-
-            <div class="actions">
-                <button class="btn" type="submit">Зберегти</button>
-                <a class="btn btn-secondary" href="{% url 'events' %}">
-                    Скасувати
-                </a>
-            </div>
-        </form>
+    <div class="actions">
+        <a class="btn" href="{% url 'event_create' %}">Створити подію</a>
+        <a class="btn btn-secondary" href="{% url 'event_calendar' %}">
+            Відкрити календар
+        </a>
     </div>
+
+    {% for event in events %}
+        <article class="detail-card">
+            <h2>
+                <a href="{% url 'event_detail' event.pk %}">
+                    {{ event.title }}
+                </a>
+            </h2>
+
+            <p>{{ event.description|default:"Опис відсутній"|truncatewords:35 }}</p>
+
+            <p>
+                <strong>Місце:</strong>
+                {{ event.location|default:"Не вказано" }}
+            </p>
+
+            <p>
+                <strong>Початок:</strong>
+                {{ event.starts_at|date:"d.m.Y H:i" }}
+            </p>
+
+            <a class="btn" href="{% url 'event_detail' event.pk %}">
+                Детальніше
+            </a>
+        </article>
+    {% empty %}
+        <div class="detail-card">
+            <p>Поки що подій немає.</p>
+        </div>
+    {% endfor %}
 
 </main>
 </body>
