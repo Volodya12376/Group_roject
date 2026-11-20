@@ -1,23 +1,25 @@
 
-{% extends 'base.html' %}
+{% extends 'portfolio/base.html' %}
 
 {% block title %}Мої проєкти{% endblock %}
 
 {% block content %}
 
 <section class="hero">
-    <h2>Ласкаво просимо до Portfolio!</h2>
+    <h2>Ласкаємо до портфоліо!</h2>
     <p>
-        Тут зібрані цікаві проєкти, творчі роботи та досягнення.
-        Переглядай роботи та ділися власними проєктами!
+        Тут зібрані проєкти, творчі роботи та досягнення.
+        Переглядай роботи й додавай власні проєкти!
     </p>
 
-    <a href="{% url 'portfolio_create' %}" class="btn">
-        + Додати проєкт
-    </a>
+    {% if user.is_authenticated %}
+        <a href="{% url 'portfolio_create' %}" class="btn">
+            + Додати проєкт
+        </a>
+    {% endif %}
 </section>
 
-<h2 class="section-title">Наші проєкти</h2>
+<h2 class="section-title">Проєкти учасників</h2>
 
 <div class="projects">
 
@@ -26,36 +28,52 @@
 
             <h3>{{ portfolio.title }}</h3>
 
-            <p>{{ portfolio.description }}</p>
+            <p>{{ portfolio.description|linebreaks }}</p>
 
-            {% if portfolio.screenshot %}
-                <img src="{{ portfolio.screenshot.url }}" alt="Скріншот проєкту">
+            {% if portfolio.preview_image %}
+                <img src="{{ portfolio.preview_image.url }}"
+                     alt="{{ portfolio.title }}"
+                     class="portfolio-image">
             {% endif %}
 
-            <p>Автор: {{ portfolio.user.username }}</p>
+            <p>
+                Автор: {{ portfolio.owner.username }}
+            </p>
 
-            {% if portfolio.link %}
+            {% if portfolio.project_url %}
                 <p>
-                    <a href="{{ portfolio.link }}" target="_blank">
-                        Переглянути проєкт →
+                    <a href="{{ portfolio.project_url }}" target="_blank"
+                       rel="noopener noreferrer">
+                        Відкрити проєкт →
                     </a>
                 </p>
             {% endif %}
 
-            {% if portfolio.file %}
+            {% if portfolio.repository_url %}
                 <p>
-                    <a href="{{ portfolio.file.url }}" download>
-                        Завантажити файл ↓
+                    <a href="{{ portfolio.repository_url }}" target="_blank"
+                       rel="noopener noreferrer">
+                        Репозиторій →
                     </a>
                 </p>
             {% endif %}
 
-            {% if user == portfolio.user %}
-                <a href="{% url 'portfolio_edit' portfolio.pk %}" class="btn">
+            {% if portfolio.attachment %}
+                <p>
+                    <a href="{{ portfolio.attachment.url }}" download>
+                        Завантажити файл проєкту
+                    </a>
+                </p>
+            {% endif %}
+
+            {% if user.is_authenticated and user == portfolio.owner %}
+                <a href="{% url 'portfolio_edit' portfolio.pk %}"
+                   class="btn">
                     Редагувати
                 </a>
 
-                <a href="{% url 'portfolio_delete' portfolio.pk %}" class="btn btn-danger">
+                <a href="{% url 'portfolio_delete' portfolio.pk %}"
+                   class="btn btn-danger">
                     Видалити
                 </a>
             {% endif %}
@@ -64,8 +82,8 @@
 
     {% empty %}
         <div class="card">
-            <h3>Поки що немає проєктів</h3>
-            <p>Стань першим, хто додасть власну роботу!</p>
+            <h3>Поки що проєктів немає</h3>
+            <p>Додай перший проєкт до портфоліо!</p>
         </div>
     {% endfor %}
 

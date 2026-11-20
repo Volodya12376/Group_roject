@@ -1,0 +1,92 @@
+
+{% extends 'base.html' %}
+
+{% block title %}Мої проєкти{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+    <h2>Ласкаємо до портфоліо!</h2>
+    <p>
+        Тут зібрані проєкти, творчі роботи та досягнення.
+        Переглядай роботи й додавай власні проєкти!
+    </p>
+
+    {% if user.is_authenticated %}
+        <a href="{% url 'portfolio_create' %}" class="btn">
+            + Додати проєкт
+        </a>
+    {% endif %}
+</section>
+
+<h2 class="section-title">Проєкти учасників</h2>
+
+<div class="projects">
+
+    {% for portfolio in portfolios %}
+        <div class="card">
+
+            <h3>{{ portfolio.title }}</h3>
+
+            <p>{{ portfolio.description|linebreaks }}</p>
+
+            {% if portfolio.preview_image %}
+                <img src="{{ portfolio.preview_image.url }}"
+                     alt="{{ portfolio.title }}"
+                     class="portfolio-image">
+            {% endif %}
+
+            <p>
+                Автор: {{ portfolio.owner.username }}
+            </p>
+
+            {% if portfolio.project_url %}
+                <p>
+                    <a href="{{ portfolio.project_url }}" target="_blank"
+                       rel="noopener noreferrer">
+                        Відкрити проєкт →
+                    </a>
+                </p>
+            {% endif %}
+
+            {% if portfolio.repository_url %}
+                <p>
+                    <a href="{{ portfolio.repository_url }}" target="_blank"
+                       rel="noopener noreferrer">
+                        Репозиторій →
+                    </a>
+                </p>
+            {% endif %}
+
+            {% if portfolio.attachment %}
+                <p>
+                    <a href="{{ portfolio.attachment.url }}" download>
+                        Завантажити файл проєкту
+                    </a>
+                </p>
+            {% endif %}
+
+            {% if user.is_authenticated and user == portfolio.owner %}
+                <a href="{% url 'portfolio_edit' portfolio.pk %}"
+                   class="btn">
+                    Редагувати
+                </a>
+
+                <a href="{% url 'portfolio_delete' portfolio.pk %}"
+                   class="btn btn-danger">
+                    Видалити
+                </a>
+            {% endif %}
+
+        </div>
+
+    {% empty %}
+        <div class="card">
+            <h3>Поки що проєктів немає</h3>
+            <p>Додай перший проєкт до портфоліо!</p>
+        </div>
+    {% endfor %}
+
+</div>
+
+{% endblock %}

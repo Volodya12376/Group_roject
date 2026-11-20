@@ -1,13 +1,23 @@
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
+
 from .models import PortfolioProject
 from .forms import PortfolioForm
 
 
 def portfolio_list(request):
-    portfolios = PortfolioProject.objects.select_related(
-        "owner"
-    ).all()
+    portfolios = PortfolioProject.objects.select_related("owner")
+
+    # Показуємо публічні проєкти всім,
+    # а приватні — тільки їхнім власникам.
+    if request.user.is_authenticated:
+        portfolios = portfolios.filter(
+            Q(is_public=True) | Q(owner=request.user)
+        )
+    else:
+        portfolios = portfolios.filter(is_public=True)
 
     return render(request, "portfolio/list.html", {
         "portfolios": portfolios

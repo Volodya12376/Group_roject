@@ -1,5 +1,5 @@
+
 {% load tz %}
-{% load static %}
 <!DOCTYPE html>
 <html lang="uk">
 <head>
@@ -8,9 +8,7 @@
     <title>Форум групи</title>
 
     <style>
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
 
         body {
             margin: 0;
@@ -20,7 +18,7 @@
         }
 
         .header {
-            background: #ffffff;
+            background: white;
             border-bottom: 1px solid #e2e8f0;
             padding: 22px 7%;
         }
@@ -46,15 +44,9 @@
             flex-wrap: wrap;
         }
 
-        h1 {
-            margin: 0 0 8px;
-            font-size: 32px;
-        }
+        h1 { margin: 0 0 8px; font-size: 32px; }
 
-        .subtitle {
-            margin: 0;
-            color: #64748b;
-        }
+        .subtitle { color: #64748b; }
 
         .button {
             display: inline-block;
@@ -64,11 +56,6 @@
             text-decoration: none;
             border-radius: 10px;
             font-weight: bold;
-            transition: background 0.2s;
-        }
-
-        .button:hover {
-            background: #1d4ed8;
         }
 
         .topic {
@@ -77,15 +64,9 @@
             border-radius: 14px;
             padding: 24px;
             margin-bottom: 16px;
-            box-shadow: 0 3px 12px rgba(15, 23, 42, 0.04);
         }
 
-        .topic h2 {
-            margin: 0 0 12px;
-            color: #1d4ed8;
-            font-size: 21px;
-            overflow-wrap: anywhere;
-        }
+        .topic h2 { color: #1d4ed8; margin-top: 0; }
 
         .topic p {
             line-height: 1.7;
@@ -93,10 +74,7 @@
             overflow-wrap: anywhere;
         }
 
-        .date {
-            color: #64748b;
-            font-size: 13px;
-        }
+        .date { color: #64748b; font-size: 13px; }
 
         .empty {
             text-align: center;
@@ -105,21 +83,6 @@
             border-radius: 14px;
             padding: 40px 20px;
             color: #64748b;
-        }
-
-        @media (max-width: 600px) {
-            .container {
-                margin-top: 28px;
-            }
-
-            h1 {
-                font-size: 27px;
-            }
-
-            .top {
-                align-items: flex-start;
-                flex-direction: column;
-            }
         }
     </style>
 </head>
@@ -132,9 +95,7 @@
         <div class="top">
             <div>
                 <h1>Форум групи</h1>
-                <p class="subtitle">
-                    Обговорюймо навчання та ділимося думками
-                </p>
+                <p class="subtitle">Обговорюймо навчання та ділимося думками</p>
             </div>
 
             <a class="button" href="{% url 'forum:topic_create' %}">
@@ -145,10 +106,27 @@
         {% for topic in topics %}
             <article class="topic">
                 <h2>{{ topic.title }}</h2>
-                <p>{{ topic.content }}</p>
+
+                {% if topic.category %}
+                    <p><strong>Розділ:</strong> {{ topic.category.title }}</p>
+                {% endif %}
+
+                <p>{{ topic.description|default:"Опис відсутній" }}</p>
+
                 <div class="date">
-                    Опубліковано: {% timezone "Europe/Kyiv" %}{{ topic.created_at|date:"d.m.Y H:i" }}{% endtimezone %}
+                    Автор: {{ topic.created_by.username }} |
+                    {% timezone "Europe/Kyiv" %}
+                        {{ topic.created_at|date:"d.m.Y H:i" }}
+                    {% endtimezone %}
                 </div>
+
+                {% if topic.is_pinned %}
+                    <p><strong>📌 Закріплена тема</strong></p>
+                {% endif %}
+
+                {% if topic.is_closed %}
+                    <p><strong>Тема закрита</strong></p>
+                {% endif %}
             </article>
         {% empty %}
             <div class="empty">
@@ -159,4 +137,3 @@
     </main>
 </body>
 </html>
-
